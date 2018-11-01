@@ -71,6 +71,7 @@ HC_plot<-function(DATA,Truelabels,Method='COR',leg=T,MAIN='',input_cex=3){
   
   #set('labels',NULL)%>% 
   hc %>% set("leaves_pch", node_type) %>% set("leaves_cex", 3) %>% set("leaves_col",  color_type )%>%
+  #hc %>% set("leaves_pch", color_type) %>% set("leaves_cex", 3) %>% set("leaves_col",  node_type )%>%
     set('clear_branches')%>%
     set('labels_cex',15)%>%
 

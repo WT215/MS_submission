@@ -199,11 +199,100 @@ for(i in 1:length(DATA_IND_LIST)){
 
 
 
+###FIUGRE4: variation of number of features used in statsitical learning #############
+
+
+####Figure 4 splitting datasets##########
+load("E:/MainProject/PROJECT_MRSA_MSSA/DRAFT/WF2_RFfixbinsize_FIGURES/halfwinsize0.5/Data4_P_RF.RData")
+load("E:/MainProject/PROJECT_MRSA_MSSA/DRAFT/WF2_RFfixbinsize_FIGURES/halfwinsize0.5/Data4_P_BI.RData")
+load("E:/MainProject/PROJECT_MRSA_MSSA/DRAFT/WF2_PEAKS_FIGURES/Data4_I_BI.RData")
+load("E:/MainProject/PROJECT_MRSA_MSSA/DRAFT/WF2_PEAKS_FIGURES/Data4_I_RF.RData")
+
+load("E:/MainProject/PROJECT_MRSA_MSSA/SUBMISSION/SUBMISSION_02122018/BMC_rebuttle/Figure4/acc_mat32_maldiloov.RData")
+
+#load("E:/MainProject/PROJECT_MRSA_MSSA/SUBMISSION/SUBMISSION_02122018/BMC_rebuttle/Figure4/ACC_mat_maldi.RData")
+
+
+ACC_mat_maldi_BI<-t(acc_mat32[,seq(1,64,2)])
+ACC_mat_maldi_RF<-t(acc_mat32[,-seq(1,64,2)])
+
+ACC_mat_maldi_BI<-rbind(ACC_mat_maldi_BI,colMeans(ACC_mat_maldi_BI))
+ACC_mat_maldi_RF<-rbind(ACC_mat_maldi_RF,colMeans(ACC_mat_maldi_RF))
+
+qq<-Data4_I_BI[1:(dim(Data4_I_BI)[1]-1),]
+Data4_I_BI<-rbind(Data4_I_BI,apply(Data4_I_BI[1:(dim(Data4_I_BI)[1]-1),],2,function(x){sd(x)/32}))
+Data4_I_RF<-rbind(Data4_I_RF,apply(Data4_I_RF[1:(dim(Data4_I_RF)[1]-1),],2,function(x){sd(x)/32}))
+Data4_P_BI<-rbind(Data4_P_BI,apply(Data4_P_BI[1:(dim(Data4_P_BI)[1]-1),],2,function(x){sd(x)/32}))
+Data4_P_RF<-rbind(Data4_P_RF,apply(Data4_P_RF[1:(dim(Data4_P_RF)[1]-1),],2,function(x){sd(x)/32}))
+
+rownames(Data4_I_BI)[length(rownames(Data4_I_BI))]<-'se of mean'
+rownames(Data4_I_RF)[length(rownames(Data4_I_RF))]<-'se of mean'
+rownames(Data4_P_BI)[length(rownames(Data4_P_BI))]<-'se of mean'
+rownames(Data4_P_RF)[length(rownames(Data4_P_RF))]<-'se of mean'
 
 
 
 
-#####Begin plot#########
+
+
+
+library(Rmisc)
+
+
+#geom_errorbar(aes(ymin=len-se, ymax=len+se),width=.2, position=position_dodge(.9))
+MEAN_IND<-which(rownames(Data4_I_BI)=='Average Mean Accuracy rate')
+SE_IND<-which(rownames(Data4_I_BI)=='se of mean')
+
+Bar_dat<-cbind(Data4_I_BI[MEAN_IND,],Data4_I_RF[MEAN_IND,],Data4_P_BI[MEAN_IND,],Data4_P_RF[MEAN_IND,],ACC_mat_maldi_BI[33,],ACC_mat_maldi_RF[33,])
+
+
+
+SE_dat<-cbind(Data4_I_BI[SE_IND,],Data4_I_RF[SE_IND,],Data4_P_BI[SE_IND,],Data4_P_RF[SE_IND,],apply(ACC_mat_maldi_BI[seq(1,32),],2,sd)/32,apply(ACC_mat_maldi_RF[seq(1,32),],2,sd)/32)
+Workflow<-c('I_BI','I_RF','P_BI','P_RF','MALDI_BI','MALDI_RF')
+
+
+
+Bar_dat2<-foreach(i=1:dim(Bar_dat)[1],.combine=rbind)%do%{
+    
+    kk<-Bar_dat[i,]
+    kk2<-cbind(kk,SE_dat[i,],Workflow,rep(rownames(Bar_dat)[i],6))
+    return(kk2)
+}
+
+
+
+Bar_dat2<-as.data.frame(Bar_dat2)
+colnames(Bar_dat2)<-c('AccuracyRate','SE','Workflow','NumberofTop')
+Bar_dat2$AccuracyRate<-as.numeric(as.character(Bar_dat2$AccuracyRate))
+Bar_dat2$SE<-as.numeric(as.character(Bar_dat2$SE))
+Bar_dat2$AccuracyRate<-round(Bar_dat2$AccuracyRate,3)
+Bar_dat2$NumberofTop<-factor(Bar_dat2$NumberofTop,levels=unique(Bar_dat2$NumberofTop))
+
+Bar_dat2$Workflow<-factor(Bar_dat2$Workflow,levels=unique(Bar_dat2$Workflow))
+
+
+textsize<-15
+
+library(ggplot2)
+#Averaged across 32 testing results
+
+dropp<-grep(Bar_dat2$Workflow,pattern='MALDI_')
+Bar_dat2<-Bar_dat2[-dropp,]
+
+ori_Fi4A<-ggplot(data=Bar_dat2, aes(x=Bar_dat2$NumberofTop, y=Bar_dat2$AccuracyRate, fill=Bar_dat2$Workflow)) +
+    geom_bar(stat="identity", position = position_dodge(0.9),width=0.9)+
+    scale_y_continuous(limits=c(0,1))+
+    geom_errorbar(aes(ymin=Bar_dat2$AccuracyRate-Bar_dat2$SE, ymax=Bar_dat2$AccuracyRate+Bar_dat2$SE),size=0.5,width=.5,position=position_dodge(.9),color='green')+
+    geom_text(aes(label=round(Bar_dat2$AccuracyRate,2)), vjust=0.1, color="black", position = position_dodge(0.9), size=4,angle=90,hjust=-0.1)+
+    labs(x = "Number of top ranked features used",y='Averaged accuracy rates',fill='Methods')+
+    scale_fill_grey()+
+    ggtitle('A')+
+    theme(axis.text=element_text(size=textsize),axis.title=element_text(size=textsize),legend.text=element_text(size=textsize),legend.title=element_text(size=textsize),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),legend.position="top",legend.key.size = unit(0.5,"line"),plot.title = element_text(size=30))
+
+ori_Fi4A
+
+####Figure 4 splitting SAMPLES##########
 load("E:/MainProject/MS_submission/Figure_numfea/listtm_par1pa15062016R1.RData")
 load("E:/MainProject/MS_submission/Figure_numfea/listtm_pcr1pa15062016R1.RData")
 load("E:/MainProject/MS_submission/Figure_numfea/listtm_pcr1pa15062016R2.RData")
@@ -363,14 +452,16 @@ textsize<-15
 library(ggplot2)
 #Averaged across 32 testing results
 
+droppp2<-grep(BAR_PLOT$Workflow,pattern='MALDI_')
+BAR_PLOT<-BAR_PLOT[-droppp2,]
 new_Fi4A<-ggplot(data=BAR_PLOT, aes(x=BAR_PLOT$NumberofTop, y=BAR_PLOT$AccuracyRate, fill=BAR_PLOT$Workflow)) +
-  geom_bar(stat="identity", position = position_dodge(0.9),width=0.9,show.legend =T)+
+  geom_bar(stat="identity", position = position_dodge(0.9),width=0.9,show.legend =F)+
   scale_y_continuous(limits=c(0,1))+
   geom_errorbar(aes(ymin=BAR_PLOT$AccuracyRate-BAR_PLOT$SE, ymax=BAR_PLOT$AccuracyRate+BAR_PLOT$SE),size=0.5,width=.5,position=position_dodge(.9),color='green')+
   geom_text(aes(label=round(BAR_PLOT$AccuracyRate,2)), vjust=0.1, color="black", position = position_dodge(0.9), size=4,angle=90,hjust=-0.1)+
   labs(x = "Number of top ranked features used",y='Averaged accuracy rates',fill='Methods')+
   scale_fill_grey()+
-  ggtitle('a')+
+  ggtitle('B')+
   theme(axis.text=element_text(size=textsize),axis.title=element_text(size=textsize),legend.text=element_text(size=textsize),legend.title=element_text(size=textsize),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"),plot.title = element_text(size=30))
 
@@ -380,7 +471,20 @@ new_Fi4A
 
 
 
-#####jaccard#########
+
+library(gridExtra)
+jpeg("E:/MainProject/PROJECT_MRSA_MSSA/SUBMISSION/SUBMISSION_02122018/newstart/figures/Figure4.jpeg", width = 10, height =12, units = 'in', res = 300)
+grid.arrange(ori_Fi4A,new_Fi4A, ncol=1, nrow=2)
+dev.off()
+
+
+
+
+
+
+
+
+#####jaccard splitting samples#########
 
 M1_vec<-c(5,10,15,30,50,100,300,500,1000)
 jaccard_mat_list<-list()
@@ -388,7 +492,6 @@ library(foreach)
 
 
 library(sets)
-
 
 
 
@@ -470,22 +573,144 @@ jaccard_control_se<-c(apply(jaccard_control_I_mat,2,function(x){sd(x)/1000}),app
 library(ggplot2)
 textsize<-15
 new_jaccard_plot<-ggplot(data=jaccard_BAR, aes(fill=jaccard_BAR$Comparisons, y=jaccard_BAR$mean, x=jaccard_BAR$sizefeatures)) +
-    geom_bar(stat="identity", position = position_dodge(0.9),width=0.9,show.legend =T)+
+    geom_bar(stat="identity", position = position_dodge(0.9),width=0.9,show.legend =F)+
     #scale_y_continuous(limits=c(0,1))+
     geom_errorbar(aes(ymin=jaccard_BAR$mean-jaccard_BAR$se, ymax=jaccard_BAR$mean+jaccard_BAR$se),size=1,width=.5,position=position_dodge(.9),color='green')+
     
     geom_errorbar(aes(ymin=jaccard_control_mean-jaccard_control_se, ymax=jaccard_control_mean+jaccard_control_se),size=1,width=.5,position=position_dodge(.9),color='blue')+
     
     #geom_text(aes(label=round(jaccard_BAR$mean,2)), vjust=0.1, color="black", position = position_dodge(0.9), size=4,angle=90,hjust=-0.5)+
-    labs(fill = "Comparisons",y='jaccard',x='# of top ranked features used')+
+    labs(fill = "Comparisons",y='Jaccard index',x='# of top ranked features used')+
     scale_fill_grey()+
-    ggtitle('b')+
-    theme(axis.text=element_text(size=textsize),axis.title=element_text(size=textsize),legend.text=element_text(size=textsize),legend.title=element_text(size=textsize),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black"),plot.title = element_text(size=30))
+    ggtitle('B')+
+    theme(axis.text=element_text(size=textsize),axis.title=element_text(size=textsize),legend.text=element_text(size=textsize),legend.title=element_text(size=textsize),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+
+#####jaccard splitting datasets#########
+load("E:/MainProject/PROJECT_MRSA_MSSA/SUBMISSION/SUBMISSION_02122018/BMC_rebuttle/Figure4/topfea_mat_list_list.RData")
+
+
+
+M1_vec<-c(5,10,15,30,50,100,300,500,1000)
+ks_mat_list<-list()
+library(foreach)
+
+for(i32 in 1:32){
+    
+    ks_mat<-foreach(i = 1:9,.combine=rbind)%do%{
+        
+        ks_vec<-NULL
+        for(j in 1:3){
+            
+            for(k in (j+1):4){
+                qq<-jaccard_fun(topfea_mat_list_list[[i32]][[i]][,j],topfea_mat_list_list[[i32]][[i]][,k])
+                ks_vec<-c(ks_vec,qq)
+            }
+        }
+        names(ks_vec)<-c('I_BI*I_RF','I_BI*P_BI','I_BI*P_RF',
+                         'I_RF*P_BI','I_RF*P_RF',
+                         'P_BI*P_RF')
+        return(ks_vec)
+    }
+    
+    
+    
+    
+    
+    
+    rownames(ks_mat)<-M1_vec
+    ks_mat_list[[i32]]<-ks_mat
+    
+}
+names(ks_mat_list)<-seq(1,32)
+
+I_BI_RF<-foreach(i=1:32,.combine=cbind)%do%{
+    qq<-ks_mat_list[[i]]
+    return(qq[,1])
+}
+P_BI_RF<-foreach(i=1:32,.combine=cbind)%do%{
+    qq<-ks_mat_list[[i]]
+    return(qq[,6])
+}
+
+I_BI_RF_rowmean<-rowMeans(I_BI_RF)
+P_BI_RF_rowmean<-rowMeans(P_BI_RF)
+
+
+I_BI_RF_se<-apply(I_BI_RF,1,sd)/sqrt(32)
+P_BI_RF_se<-apply(P_BI_RF,1,sd)/sqrt(32)
+
+
+I_dat<-data.frame(mean=I_BI_RF_rowmean,se=I_BI_RF_se,Comparisons=rep('I_BI*I_RF',9),sizefeatures=as.factor(M1_vec))
+P_dat<-data.frame(mean=P_BI_RF_rowmean,se=P_BI_RF_se,Comparisons=rep('P_BI*P_RF',9),sizefeatures=as.factor(M1_vec))
+Bar_dat<-rbind(I_dat,P_dat)
 
 
 
 
+#old control#######
+load("E:/MainProject/PROJECT_MRSA_MSSA/SUBMISSION/SUBMISSION_02122018/BMC_rebuttle/ppqq_OLD.RData")
+
+nuuu_vec<-c(5,10,15,30,50,100,300,500,1000)
+
+
+old_control_I_mat<-foreach(i=1:9,.combine=cbind)%:%
+    foreach(j=1:1000,.combine=c)%do%{
+        nuuu<-nuuu_vec[i]
+        pp<-jaccard_fun(sample(old_qq1,nuuu),sample(old_qq2,nuuu))
+        return(pp)
+    }
+colMeans(old_control_I_mat)
+apply(old_control_I_mat,2,function(x){sd(x)/1000})
+
+
+
+
+old_control_P_mat<-foreach(i=1:9,.combine=cbind)%:%
+    foreach(j=1:1000,.combine=c)%do%{
+        nuuu<-nuuu_vec[i]
+        pp<-jaccard_fun(sample(old_pp1,nuuu),sample(old_pp2,nuuu))
+        return(pp)
+    }
+colMeans(old_control_P_mat)
+apply(old_control_P_mat,2,function(x){sd(x)/1000})
+
+old_control_mean<-c(colMeans(old_control_I_mat),colMeans(old_control_P_mat))
+old_control_se<-c(apply(old_control_I_mat,2,function(x){sd(x)/1000}),apply(old_control_P_mat,2,function(x){sd(x)/1000}))
 
 library(ggplot2)
+textsize<-15
+ori_KS_plot<-ggplot(data=Bar_dat, aes(fill=Bar_dat$Comparisons, y=Bar_dat$mean, x=Bar_dat$sizefeatures)) +
+    geom_bar(stat="identity", position = position_dodge(0.9),width=0.9)+
+    scale_y_continuous(limits=c(0,1))+
+    geom_errorbar(aes(ymin=Bar_dat$mean-Bar_dat$se, ymax=Bar_dat$mean+Bar_dat$se),size=1,width=.5,position=position_dodge(.9),color='green')+
+    geom_errorbar(aes(ymin=old_control_mean-old_control_se, ymax=old_control_mean+old_control_se),size=1,width=.5,position=position_dodge(.9),color='blue')+
+    #geom_text(aes(label=round(Bar_dat$mean,2)), vjust=0.1, color="black", position = position_dodge(0.9), size=4,angle=90,hjust=-0.5)+
+    labs(fill = "Comparisons",y='Jaccard index',x='# of top ranked features used')+
+    scale_fill_grey()+
+    ggtitle('A')+
+    theme(axis.text=element_text(size=textsize),axis.title=element_text(size=textsize),legend.text=element_text(size=textsize),legend.title=element_text(size=textsize),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black"),legend.position="top")
+
+ori_KS_plot
+
+
+
+g_legend<-function(a.gplot){
+    tmp <- ggplot_gtable(ggplot_build(a.gplot))
+    leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+    legend <- tmp$grobs[[leg]]
+    return(legend)}
+
+mylegend<-g_legend(ori_KS_plot)
+
 library(gridExtra)
-grid.arrange(new_Fi4A,new_jaccard_plot, ncol=1, nrow=2)
+jpeg("E:/MainProject/PROJECT_MRSA_MSSA/SUBMISSION/SUBMISSION_02122018/newstart/figures/Figure5.jpeg", width = 10, height =5, units = 'in', res = 300)
+#grid.arrange(ori_KS_plot+ theme(legend.position="none"),new_jaccard_plot, ncol=2, nrow=1)
+p3 <- grid.arrange(arrangeGrob(ori_KS_plot + theme(legend.position="none"),
+                               new_jaccard_plot + theme(legend.position="none"),
+                               nrow=1),
+                   mylegend, nrow=2,heights=c(10, 1))
+dev.off()
+
+
+
