@@ -1,8 +1,8 @@
 
-source("E:/MainProject/MS_submission/Functions/FUNCTIONS.R")
+source("D:/MainProject/MS_submission/Functions/FUNCTIONS.R")
 
 #Complete code:E:/MainProject/MS_submission/Figure_Clustering/ANALYSIS_ROUTINE.R
-load("E:/MainProject/MS_submission/Figure_Clustering/WORKFLOW1_CLUSTERING.RData")
+load("D:/MainProject/MS_submission/Figure_Clustering/WORKFLOW1_CLUSTERING.RData")
 HC_plot2<-function(DATA,Truelabels,Method='COR',leg=T,MAIN='',input_cex=3){
     if(Method=='COR'){
         dissimarity<-1-abs(cor(t(DATA)))

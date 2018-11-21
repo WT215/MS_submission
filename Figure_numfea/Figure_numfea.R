@@ -1,7 +1,7 @@
-source("E:/MainProject/MS_submission/Functions/4BIO_M1_FUNCTIONS.R")
+source("D:/MainProject/MS_submission/Functions/4BIO_M1_FUNCTIONS.R")
 
 #leave one out MALDIquant first workflow for supervised learning
-source("E:/MainProject/PROJECT_MRSA_MSSA/R_codes/MALDI_SUPER_LOOV_funs.R")
+source("D:/MainProject/PROJECT_MRSA_MSSA/R_codes/MALDI_SUPER_LOOV_funs.R")
 
 #########LOAD FUNCTIONS############
 ##########BEGIN OF PREPARE
@@ -55,7 +55,7 @@ featureMat<-function(spectra_input,ref){
 #Rcpp::sourceCpp('E:/MainProject/PROJECT_MRSA_MSSA/C_codes/extractFeatureMatrix.cpp')
 library(MALDIrcpp)
 
-load("E:/MainProject/PROJECT_MRSA_MSSA/R_codes/LOAD_7_MRSAMSSA_data.RData")
+load("D:/MainProject/PROJECT_MRSA_MSSA/R_codes/LOAD_7_MRSAMSSA_data.RData")
 data_name<-c('pc','pa','r1','r2','pa15062016','R1','R2')
 All_data_list<-list(pc_list,pa_list,r1_list,r2_list,pa15062016_list,MRMS_050816run1_list,MRMS_050816run2_list)
 names(All_data_list)<-data_name
