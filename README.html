@@ -126,10 +126,11 @@ $(document).ready(function () {
 
 <div id="ms_submission" class="section level1">
 <h1>MS_submission</h1>
-</div>
-<div id="raw-data" class="section level1">
-<h1>RAW data</h1>
-<pre class="r"><code>load('~/RAW_data/LOAD_7_MRSAMSSA_data.RData')</code></pre>
+<div id="loading-raw-data-in-r" class="section level2">
+<h2>Loading rAW data in R</h2>
+<pre class="r"><code>load('~/RAW_data/LOAD_7_MRSAMSSA_data.RData')
+
+#&quot;LOAD_7_MRSAMSSA_data.RData&quot; can be downloaded via https://imperialcollegelondon.box.com/s/dw0vbr2po5io2ce87qexjtgu7jdsektx</code></pre>
 <table>
 <colgroup>
 <col width="19%"></col>
@@ -182,6 +183,11 @@ MRMS_050816run2_list
 
 #Data 7
 pa15062016_list</code></pre>
+</div>
+<div id="view-one-mrsa-sample" class="section level2">
+<h2>View one MRSA sample:</h2>
+<pre class="r"><code>plot(pc_list$cR1,type='l',ylab='Intensities,xlab='m/z)</code></pre>
+</div>
 </div>
 
 

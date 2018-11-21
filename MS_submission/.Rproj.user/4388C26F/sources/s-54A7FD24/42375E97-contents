@@ -6,6 +6,8 @@
 
 ```R
 load('~/RAW_data/LOAD_7_MRSAMSSA_data.RData')
+
+#"LOAD_7_MRSAMSSA_data.RData" can be downloaded via https://imperialcollegelondon.box.com/s/dw0vbr2po5io2ce87qexjtgu7jdsektx
 ```
 
 |                             |    Biological replicate 1    |    Biological replicate 2    |    Biological replicate 3    |    Biological replicate 4    |
