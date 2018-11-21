@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1540404330910.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "0|38|52|0|\n55|45|92|0|\n",
+    "hash" : "64652484",
+    "id" : "A9874253",
+    "lastKnownWriteTime" : 1540826794,
+    "last_content_update" : 1540826794685,
+    "path" : "E:/MainProject/MS_submission/Figure_top100supervised/Figure_top100supervised.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "778,73",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

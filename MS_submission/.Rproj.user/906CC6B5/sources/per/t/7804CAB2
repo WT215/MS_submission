@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1540402525576.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "876187650",
+    "id" : "7804CAB2",
+    "lastKnownWriteTime" : 1540822787,
+    "last_content_update" : 1540822787905,
+    "path" : "E:/MainProject/MS_submission/Functions/FUNCTIONS.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "73,3",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

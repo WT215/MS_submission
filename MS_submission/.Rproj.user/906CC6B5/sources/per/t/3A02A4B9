@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1540403070151.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3118510518",
+    "id" : "3A02A4B9",
+    "lastKnownWriteTime" : 1540825787,
+    "last_content_update" : 1540825788019,
+    "path" : "E:/MainProject/MS_submission/Figure_numfea/Figure_numfea.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "465,86",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

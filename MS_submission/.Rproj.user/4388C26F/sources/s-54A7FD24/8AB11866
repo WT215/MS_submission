@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1542788189141.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3622842594",
+    "id" : "8AB11866",
+    "lastKnownWriteTime" : 1542788214,
+    "last_content_update" : 1542788214316,
+    "path" : "D:/MainProject/MS_submission/Figure_Clustering/WORKFLOW1_CLUSTERING.r",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "5,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1540402907662.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1328570991",
+    "id" : "78356BEB",
+    "lastKnownWriteTime" : 1533474835,
+    "last_content_update" : 1533474835,
+    "path" : "E:/MainProject/MS_submission/Figure_Clustering/ANALYSIS_ROUTINE.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "511,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

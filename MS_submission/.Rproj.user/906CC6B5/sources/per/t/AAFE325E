@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1540405431091.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "229512631",
+    "id" : "AAFE325E",
+    "lastKnownWriteTime" : 1540405607,
+    "last_content_update" : 1540405607686,
+    "path" : "E:/MainProject/MS_submission/Figure_top100/TOP100_first7astrain.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "91,129",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
