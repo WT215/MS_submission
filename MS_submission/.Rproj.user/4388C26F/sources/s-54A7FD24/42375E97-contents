@@ -2,7 +2,7 @@
 
 
 
-## Loading rAW data in R
+## Loading raw data in R
 
 ```R
 load('~/RAW_data/LOAD_7_MRSAMSSA_data.RData')
